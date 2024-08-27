@@ -1,29 +1,38 @@
 import streamlit as st
-import pandas as pd
 
-@st.cache_data
-def load_data():
-    url = "https://github.com/MEADecarb/programtree/raw/main/Programlist%20-%20Sheet1.csv"
-    try:
-        return pd.read_csv(url)
-    except Exception as e:
-        st.error(f"Error loading data: {e}")
-        return pd.DataFrame()
+# Hardcoded program URLs
+program_urls = {
+    "Residential Clean Energy Rebate Program": "https://example.com/residential-clean-energy",
+    "Maryland Solar Access Program": "https://example.com/maryland-solar-access",
+    "Maryland Energy Storage Income Tax Credit": "https://example.com/energy-storage-tax-credit",
+    "Inflation Reduction Act HOME Energy Efficiency and Electrification Rebate Program": "https://example.com/home-energy-efficiency-rebate",
+    "OPEN Innovation Energy Grant Program": "https://example.com/open-innovation-energy-grant",
+    "Maryland Offshore Wind Workforce Training & Education Program": "https://example.com/offshore-wind-training",
+    "Solar Canopy and Dual Use Technology Grant Program": "https://example.com/solar-canopy-dual-use",
+    "Mechanical Insulation Grant Program": "https://example.com/mechanical-insulation",
+    "Energy Efficiency Equity Grant Program": "https://example.com/energy-efficiency-equity",
+    "Commercial, Industrial, & Agricultural Grant Program": "https://example.com/commercial-industrial-agricultural",
+    "Electric Vehicle Supply Equipment Rebate Program": "https://example.com/ev-rebate",
+    "Medium-Duty and Heavy-Duty Zero-Emission Vehicle Grant Program": "https://example.com/zero-emission-vehicle",
+    "Resilient Maryland Program": "https://example.com/resilient-maryland",
+    "Energy Efficiency and Conservation Block Grant": "https://example.com/energy-efficiency-block-grant",
+    "Maryland Smart Energy Communities": "https://example.com/smart-energy-communities",
+    "Clean Energy Siting Grant/Feasibility Study": "https://example.com/clean-energy-siting",
+    "Decarbonizing Public Schools Program": "https://example.com/decarbonizing-public-schools",
+    "Electric School Bus Grant Program": "https://example.com/electric-school-bus",
+    "Higher Education Clean Energy Grant Pilot Program": "https://example.com/higher-education-clean-energy"
+}
 
-def display_table(programs, data):
-    filtered_data = data[data['Program Name'].isin(programs)]
-    if not filtered_data.empty:
-        for _, row in filtered_data.iterrows():
-            st.markdown(f"[{row['Program Name']}]({row['URL']})")
+def display_table(programs):
+    if programs:
+        for program in programs:
+            url = program_urls.get(program, "#")
+            st.markdown(f"[{program}]({url})")
     else:
         st.warning("No matching programs found.")
 
 def main():
     st.title("MEA Program Selection Tool")
-
-    data = load_data()
-    if data.empty:
-        st.stop()
 
     entity_type = st.selectbox(
         "What type of entity are you?",
@@ -215,7 +224,7 @@ def main():
         elif private_edu_type == "Private College or Higher Learning Institution":
             programs = ["Higher Education Clean Energy Grant Pilot Program"]
 
-    display_table(programs, data)
+    display_table(programs)
 
 if __name__ == "__main__":
     main()
